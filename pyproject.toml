@@ -31,3 +31,9 @@ dependencies = [
 [project.urls]
 "Homepage" = "https://github.com/lhami/flavor-fetcher"
 "Bug Tracker" = "https://github.com/lhami/flavor-fetcher/issues"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where=["data"]
