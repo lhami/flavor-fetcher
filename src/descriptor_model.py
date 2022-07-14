@@ -2,7 +2,7 @@ import keras
 from keras.callbacks import ModelCheckpoint
 from keras.utils.np_utils import to_categorical
 import numpy as np
-from matplotlib import pyplot #only necessary to train the model, could add a toggle
+#from matplotlib import pyplot #only necessary to train the model, could add a toggle
 
 #from library import * #Previously, this file was calling library, and now library (renamed to ExtractDescriptors) calls this file?
 
@@ -79,15 +79,15 @@ class DescriptorExtractorNN:
 
         return hist
 
-        # plot train and validation loss
-        pyplot.plot(hist.history['loss'])
-        pyplot.plot(hist.history['val_loss'])
-        pyplot.title('Model train vs validation loss')
-        pyplot.ylabel('Loss')
-        pyplot.xlabel('Epoch')
-        pyplot.legend(['Train', 'Validation'], loc='upper right')
-        pyplot.show()
-        #print("Accuracy:",np.mean(hist.history['accuracy']))
+        # # plot train and validation loss
+        # pyplot.plot(hist.history['loss'])
+        # pyplot.plot(hist.history['val_loss'])
+        # pyplot.title('Model train vs validation loss')
+        # pyplot.ylabel('Loss')
+        # pyplot.xlabel('Epoch')
+        # pyplot.legend(['Train', 'Validation'], loc='upper right')
+        # pyplot.show()
+        # print("Accuracy:",np.mean(hist.history['accuracy']))
     #===========================================
     
     def evaluate(self, lstm_phrase, lstm_precontext, lstm_postcontext, y, patience=5, batch_size=32):

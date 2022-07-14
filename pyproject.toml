@@ -1,21 +1,31 @@
 [build-system]
-requires = ["numpy","keras","pandas",]
-build-backend = "IDK WHAT GOES HERE"
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "flavorfetcher"
+description = "Python code to identify flavor-descriptors in natural language English text using a pre-trained LSTM. https://doi.org/10.3390/foods10071633"
 version = "0.0.1"
 authors = [
+  { name = "Chreston Miller", email="chmille3@vt.edu"},
   { name="Leah Hamilton", email="leah.hamilton0@gmail.com" },
 ]
-description = "A small example package"
+maintainers = [
+  { name="Leah Hamilton", email="leah.hamilton0@gmail.com" },
+]
 readme = "README.md"
 license = { file="LICENSE" }
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: GPL v3",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Operating System :: OS Independent",
+	"Intended Audience :: Science/Research"
+]
+dependencies = [
+	"numpy",
+	"keras>=2.3",
+	"pandas"
 ]
 
 [project.urls]
