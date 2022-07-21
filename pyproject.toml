@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "flavorfetcher"
 description = "Python code to identify flavor-descriptors in natural language English text using a pre-trained LSTM. https://doi.org/10.3390/foods10071633"
-version = "0.0.1"
+version = "0.0.5"
 authors = [
   { name = "Chreston Miller", email="chmille3@vt.edu"},
   { name="Leah Hamilton", email="leah.hamilton0@gmail.com" },
@@ -25,7 +25,8 @@ classifiers = [
 dependencies = [
 	"numpy",
 	"keras>=2.3",
-	"pandas"
+	"pandas",
+	"tensorflow>=2"
 ]
 
 [project.urls]
@@ -34,6 +35,3 @@ dependencies = [
 
 [tool.setuptools]
 include-package-data = true
-
-[tool.setuptools.packages.find]
-where=["data"]

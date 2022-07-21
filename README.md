@@ -7,11 +7,18 @@ Programmed in Python using the deep learning backend keras, this package include
 ## Installation and Dependencies
 
 When you download this package using `pip`, it should automatically download the dependencies:
-- keras>=2.3
-- numpy
-- pandas
+- `keras>=2.3`
+- `numpy`
+- `pandas`
+- `tensorflow>2`
 
-`pip install flavor-fetcher`
+If you'd like to enable GPU acceleration (recommended for (re)training), you are encouraged to download your preferred versions of [`tensorflow`](https://www.tensorflow.org/install) (via `pip`) and [CUDA](https://developer.nvidia.com/cuda-toolkit) (via the NVIDIA website) *before* installing this package.
+
+`pip install flavorfetcher`
+If you are downloading this package from the source (e.g., acquired via GitHub), you'll have to replace `flavorfetcher` with a pointer to the directory this `README.md` is in, which will be specific to you. As one possible example:
+`pip install C:/Users/YOURNAME/Documents/flavor-fetcher`
+
+Once you have installed this package via `pip`, you will be able to run the [code examples below](#predicting-in-python) in any Python interpreter or IDE by [importing the relevant functions](https://docs.python.org/3/reference/import.html).
 
 Additionally, to run this code, you will need to manually download the 300-dimension [GloVe embeddings](https://nlp.stanford.edu/projects/glove/) from the Stanford NLP website (`glove.42B.300d.txt`). If you're new to programming, we recommend saving this large file to the same place as your data files so you'll know where to find it.
 
@@ -35,30 +42,35 @@ You can use any English-language tokenizer & part-of-speech tagger to prepare yo
 
 You can make predictions in Python by importing the package and calling the function `file_to_file_workflow()` from the module `flavor-fetcher.makepredictions`. The simplest example (using the provided example data, model, etc) is:
 ```
-from flavor-fetcher.makepredictions import file_to_file_workflow
-file_to_file_workflow("example_data.csv", "100_2021-04-20 10_38_24.203316_3_epochs_re-run_model.h5", "glove.42B.300d.txt", "100_2021-04-20 10_38_24.203316_3_epochs_re-run_model.json", "predicted_descriptors.csv")
+from flavorfetcher.makepredictions import file_to_file_workflow as do_predict
+do_predict(glove_file = "glove.42B.300d.txt")
 ```
+Because of its size, the GloVe embedding file is not included with this package and you must *always* specify its location. All other files are optional.
 
-In practice, you will likely need to change the file names to reflect your specific use-case and to represent where the files are located in your filesystem, unless they're all in the current working directory.
-The script, by default, looks for [the exact column names mentioned above](###Data Formatting). All files need to have these columns, but if your `.csv` file has differing column names, you can specify them as follows:
+By default, this package will pull the model, settings, and data files from the ones included in the package, and will save the output as `tokenwise_lstm_predictions_YYYYMMDD-HHMMSS.csv` in the current working directory. If you're not sure where that is, you can always specify the output location yourself. You will also likely have to specify your own data, for most use-cases. So a more common usage may look like:
+```
+from flavorfetcher.makepredictions import file_to_file_workflow as do_predict
+do_predict(reviews_file = "example_data.csv", glove_file = "glove.42B.300d.txt", output_file = "predicted_descriptors.csv")
+```
+In practice, you will likely need to change the above file names to reflect your specific use-case and to represent where the files are located in your filesystem, unless they're all in the current working directory.
 
+The script, by default, looks for [the exact column names mentioned above](#data-formatting). All files need to have these columns, but if your `.csv` file has differing column *names*, you can specify them as follows:
 ```
 mycolnames = {"token" : "customtokenid", "upos" : "customuposid", "doc_id" : "customdocid", "sid" : "customsentenceid", "tid" : "customtokenid"}
-file_to_file_workflow("example_data.csv", "model.h5", "glove.42B.300d.txt", "model.json", "predicted_descriptors.csv", mycolnames)
+file_to_file_workflow("example_data.csv", "glove.42B.300d.txt", "model.h5", "model.json", "predicted_descriptors.csv", mycolnames)
 ```
 
-You can also change only a few of the default column names by importing `flavor-fetcher.datamunging.default_col_names`:
-
+You can also change only a few of the default column names by importing `flavorfetcher.datamunging.default_col_names`:
 ```
-from flavor-fetcher.datamunging import default_col_names as mycolnames
+from flavorfetcher.datamunging import default_col_names as mycolnames
 mycolnames['tid'] = "token_id"
 mycolnames['sid'] = "sentence_id"
-file_to_file_workflow("example_data.csv", "model.h5", "glove.42B.300d.txt", "model.json", "predicted_descriptors.csv", mycolnames)
+file_to_file_workflow("example_data.csv", "glove.42B.300d.txt", "model.h5", "model.json", "predicted_descriptors.csv", mycolnames)
 ```
 
 ### Predicting in the Command Line
 
-
+*Coming soon*
 
 ### Training
 
@@ -67,9 +79,10 @@ The `descriptor_model` module contains a definition of the `DescriptorNN` class,
 ## Files
 - `README.md` - This file.
 - `LICENSE` - The GPL v3.0 license this software is provided under.
-- `src/makepredictions.py` - A python module with the function `file_to_file_workflow()`, which can be given the file locations of a `.csv` reviews_file, a `.h5` model file with the appropriate architecture, the 300-dimension [GloVe embeddings](https://nlp.stanford.edu/projects/glove/) (`glove.42B.300d.txt`), a settings file (`.json` with the `CONTEXT_WINDOW_SIZE` and `GLOVE_EMBEDDING_DIMENSIONS` used to train the model), and an output file (`.csv`, should not currently exist). If the column names are not identical to those in the example file `data/annotated_whisky_reviews_032320.csv`, the column names will have to be specified as a dictionary using the last argument as show in the usage examples. This file can also be run as a script from the command line, which will by default reproduce the results of ["Sensory Descriptor Analysis of Whisky Lexicons through the Use of Deep Learning"](https://doi.org/10.3390/foods10071633) but can be used to use a pre-trained model to predict descriptors in any tokenized and POS-tagged dataset with the appropriate arguments.
+- `MANIFEST.in` & `pyproject.toml` - Files required for `pip` or another builder to make an installable version of this code. Do not move or change these.
+- `src/makepredictions.py` - A python module with the function `file_to_file_workflow()`, which can be given the file locations of a `.csv` reviews_file, a `.h5` model file with the appropriate architecture, the 300-dimension [GloVe embeddings](https://nlp.stanford.edu/projects/glove/) (`glove.42B.300d.txt`), a settings file (`.json` with the `CONTEXT_WINDOW_SIZE` and `GLOVE_EMBEDDING_DIMENSIONS` used to train the model), and an output file (`.csv`, should not currently exist). If the column names are not identical to those in the example file `src/ata/Example Whiskey Reviews.csv`, the column names will have to be specified as a dictionary using the last argument as show in the usage examples. This file can also be run as a script from the command line, which will by default reproduce the results of ["Sensory Descriptor Analysis of Whisky Lexicons through the Use of Deep Learning"](https://doi.org/10.3390/foods10071633) but can be used to use a pre-trained model to predict descriptors in any tokenized and POS-tagged dataset with the appropriate arguments.
 - `src/datamunging.py` - A python module with many helper functions used to remove punctuation, reindex tokens for `keras`, convert tokens to GloVe embeddings, and set each token's context window. Primarily called by `src/makepredictions.py`
 - `src/descriptor_model.py` - A python script defining the `DescriptorNN` class, which holds a (trained) descriptor-predictor model and is used to make predictions.
-- `data/100_2021-04-20 10_38_24.203316_3_epochs_re-run_model.h5` - The exact network trained and used in the paper ["Sensory Descriptor Analysis of Whisky Lexicons through the Use of Deep Learning"](https://doi.org/10.3390/foods10071633). Necessary to make predictions using `src/makepredictions.py`.
-- `data/100_2021-04-20 10_38_24.203316_3_epochs_re-run_model.json` - A settings file that should be saved and distributed alongside the trained model in order to specify the `CONTEXT_WINDOW_SIZE` and `GLOVE_EMBEDDING_DIMENSIONS` used to train the model so predictions can be made on appropriately-shaped data.
-- `data/annotated_whisky_reviews_032320.csv` - A data file containing one row per token in the [Whiskycast](https://whiskycast.com/tastingnotes/) and [WhiskyAdvocate](https://www.whiskyadvocate.com/ratings-and-reviews/) reviews, used for prediction. Tokenization and annotation done using SpaCy through CleanNLP. Only the fields `upos`, `token`, `doc_id`, `sid`, and `tid` are used.
+- `src/data/100_2021-04-20 10_38_24.203316_3_epochs_re-run_model.h5` - The exact network trained and used in the paper ["Sensory Descriptor Analysis of Whisky Lexicons through the Use of Deep Learning"](https://doi.org/10.3390/foods10071633). Necessary to make predictions using `src/makepredictions.py`.
+- `src/data/100_2021-04-20 10_38_24.203316_3_epochs_re-run_model.json` - A settings file that should be saved and distributed alongside the trained model in order to specify the `CONTEXT_WINDOW_SIZE` and `GLOVE_EMBEDDING_DIMENSIONS` used to train the model so predictions can be made on appropriately-shaped data.
+- `src/data/Example Whiskey Reviews.csv` - A data file containing one row per token in 100 selected reviews from the [Whiskycast](https://whiskycast.com/tastingnotes/) and [WhiskyAdvocate](https://www.whiskyadvocate.com/ratings-and-reviews/) websites, used for prediction. Tokenization and annotation done using SpaCy through CleanNLP. Only the fields `upos`, `token`, `doc_id`, `sid`, and `tid` are used. It also contains the predictions as calculated by the provided LSTM on our machine (`expected_prediction`), so you can confirm the package is working as intended.
