@@ -1,6 +1,6 @@
 # Sensory Descriptor Identifier
 
-This tool was created by Chreston Miller, a researcher at Virginia Tech, to identify words with flavor-descriptive meanings in food reviews and other texts. It is based on the archetecture described by Intuition Engineering in the article ["Deep learning for specific information extraction from unstructured texts"](https://towardsdatascience.com/deep-learning-for-specific-information-extraction-from-unstructured-texts-12c5b9dceada). The results on whiskey reviews have been published in ["Sensory Descriptor Analysis of Whisky Lexicons through the Use of Deep Learning"](https://doi.org/10.3390/foods10071633). Significant changes to streamline and standardize preprocessing have been made by Leah Hamilton, a fellow author and current maintainer of this repository. Email [Chreston Miller](mailto:chmille3@vt.edu) if you want code to identically reproduce the results of the Foods paper.
+This tool was created by Chreston Miller, a researcher at Virginia Tech, to identify words with flavor-descriptive meanings in English-language food reviews and other texts. It is based on the archetecture described by Intuition Engineering in the article ["Deep learning for specific information extraction from unstructured texts"](https://towardsdatascience.com/deep-learning-for-specific-information-extraction-from-unstructured-texts-12c5b9dceada). The results on whiskey reviews have been published in ["Sensory Descriptor Analysis of Whisky Lexicons through the Use of Deep Learning"](https://doi.org/10.3390/foods10071633). Significant changes to streamline and standardize preprocessing have been made by Leah Hamilton, a fellow author and current maintainer of this repository. Email [Chreston Miller](mailto:chmille3@vt.edu) if you want code to identically reproduce the results of the Foods paper.
 
 Programmed in Python using the deep learning backend keras, this package includes a set of whiskey reviews from [Whiskycast](https://whiskycast.com/tastingnotes/), [WhiskyAdvocate](https://www.whiskyadvocate.com/ratings-and-reviews/), [The Whiskey Jug](https://thewhiskeyjug.com/), and [Breaking Bourbon](https://www.breakingbourbon.com/bourbon-rye-whiskey-reviews-sort-by-review-date) with manually-annotated examples of flavor-descriptive and flavor-nondescriptive adjectives and nouns, a trained neural network to predict the descriptive or nondescriptive status of a token in context, and code to use the trained network to tag all tokens in the example dataset as descriptive or nondescriptive.
 
@@ -72,9 +72,55 @@ file_to_file_workflow("example_data.csv", "glove.42B.300d.txt", "model.h5", "mod
 
 *Coming soon*
 
+### Predicting in R
+
+R and RStudio users should be able to use the R package [`reticulate`](https://rstudio.github.io/reticulate/) to call this package's functions from within an R script, but this functionality has not been tested and should be considered a recommendation for advanced users only.
+
+*A full tutorial for R users is planned in the future.*
+
 ### Training
 
 The `descriptor_model` module contains a definition of the `DescriptorNN` class, whose methods will allow for limited training, but anyone looking to change the architecture or fine-tune the model should look into implementing a model of the same/similar structure in `keras` itself.
+
+## Contributing
+
+If you use this tool, the best ways to give back are to [cite our paper](https://doi.org/10.3390/foods10071633) and to let us know how it's doing! We are actively looking to improve this tool.
+
+To let us know how it's doing, take around 20 sentences from your dataset (or more), tokenize them, and put them into a [tidy format](#data-formatting). Add a column with the "ground truth"--`0` for most of the tokens and `1` if you think it is a word describing a flavor. Run this little dataset through our tool and send the results to [Leah Hamilton](mailto:lmhamilton@ucdavis.edu) with a little explanation of your data/project. We may contact you about your data if the tool is performing poorly on it, to help make it better for everyone. Even if this isn't possible, we appreciate you sending a little report one way or another!
+
+This repository only works on English text. If you are interested in identifying descriptors in another language *and* speak that language, please reach out to [Leah Hamilton](mailto:lmhamilton@ucdavis.edu) about a potential collaboration.
+
+## Troubleshooting
+
+### Python Setup
+
+This package requires python 3.7 or newer. If you don't know how python works, how to install it, or how to run python code, you should start by reading and following the installation tutorial for [Windows](https://docs.python.org/3/using/windows.html) or [Mac](https://docs.python.org/3/using/mac.html) computers *and* the [tutorial on using python interactively](https://docs.python.org/3/tutorial/interpreter.html). We advise *against* installing python as a part of `anaconda`, since it will download much more than you actually need.
+
+If you are having issues [installing this package](#installation-and-dependencies) or if you get any error messages related to `keras`, `tensorflow`, `pip`, or `setuptools`, especially if you're using a Mac, you may find that it's easier to install and run this package inside of a virtual environment. Note that some `tensorflow` "errors" are more like warnings--if the code continues to run, it's probably fine!
+
+A [python virutal environment](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/) is a quarantined installation of python that allows you to have more control over exactly what versions of what packages are installed without interfering with or trying to use other python installations on your system.
+
+First, decide where you'll save your virtual environment. This could be in your documents folder, or wherever you keep your code. Whatever is convenient and memorable for you. Navigate there in your command line of choice.
+
+To create the virtual environment here and install the packages needed, run the code:
+```
+python -m venv flavor-fetcher-test
+flavor-fetcher-test\Scripts\activate
+python -m pip install flavorfetcher
+```
+This only needs to be run once per system, when you first set up your virtual environment. You can change the name of the virtual environment (`flavor-fetcher-test`) if you want. You will have to make the corresponding change in the line that activates the virtual environment as well.
+
+From here, once the virtual environment is activated (you'll know because the command line will replace the `>` character with the name of the virtual environment wherever you're typing), you can start a python session using `python` and then follow [the instructions above](#predicting-in-python) to actually run the package.
+
+Any time you want to use the virtual environment, you should run `flavor-fetcher-test\Scripts\activate`, and when you are done, you can deactivate it by typing `deactivate`.
+
+### Speed
+
+On a middle-of-the-road computer, you should estimate that running this package will take about 5 minutes for initial setup and then 20-50 ms/token to make the predictions.
+
+If you have a particularly large dataset, you might consider splitting it into multiple files, as the program does not save until it's finished and you will lose all prediction progress on an interruption.
+
+If you have a computer with an NVIDIA GPU, you can also set up `tensorflow` to use GPU acceleration. To do this, you should install an appropriate version of CUDA and a GPU-compatible version of `tensorflow` yourself using `pip` as descibed [in the tensorflow documentation](https://www.tensorflow.org/install/pip), rather than letting this package install it as a dependency. If you are using a laptop and are not sure whether you have an NVIDIA GPU, you probably don't.
 
 ## Files
 - `README.md` - This file.
@@ -86,3 +132,8 @@ The `descriptor_model` module contains a definition of the `DescriptorNN` class,
 - `src/data/100_2021-04-20 10_38_24.203316_3_epochs_re-run_model.h5` - The exact network trained and used in the paper ["Sensory Descriptor Analysis of Whisky Lexicons through the Use of Deep Learning"](https://doi.org/10.3390/foods10071633). Necessary to make predictions using `src/makepredictions.py`.
 - `src/data/100_2021-04-20 10_38_24.203316_3_epochs_re-run_model.json` - A settings file that should be saved and distributed alongside the trained model in order to specify the `CONTEXT_WINDOW_SIZE` and `GLOVE_EMBEDDING_DIMENSIONS` used to train the model so predictions can be made on appropriately-shaped data.
 - `src/data/Example Whiskey Reviews.csv` - A data file containing one row per token in 100 selected reviews from the [Whiskycast](https://whiskycast.com/tastingnotes/) and [WhiskyAdvocate](https://www.whiskyadvocate.com/ratings-and-reviews/) websites, used for prediction. Tokenization and annotation done using SpaCy through CleanNLP. Only the fields `upos`, `token`, `doc_id`, `sid`, and `tid` are used. It also contains the predictions as calculated by the provided LSTM on our machine (`expected_prediction`), so you can confirm the package is working as intended.
+
+## Citing this Package
+If you use this package in any published work, please cite the associated publication:
+
+Miller, C.; Hamilton, L.; Lahne, J. 2021. Sensory Descriptor Analysis of Whisky Lexicons through the Use of Deep Learning. *Foods* 10(7), 1633. https://doi.org/10.3390/foods10071633 

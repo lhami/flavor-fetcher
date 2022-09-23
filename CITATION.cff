@@ -1,0 +1,58 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Flavor Fetcher
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+version: 1.0.0
+date-released: 2022-09-23
+authors:
+  - given-names: Chreston
+    family-names: Miller
+    email: chmille3@vt.edu
+    affiliation: Virginia Tech
+    orcid: 'https://orcid.org/0000-0003-4276-0537'
+  - given-names: Leah
+    family-names: Hamilton
+    email: lmhamilton@ucdavis.edu
+    affiliation: UC Davis
+    orcid: 'https://orcid.org/0000-0002-3018-2541'
+  - given-names: Jacob
+    family-names: Lahne
+    email: jlahne@vt.edu
+    affiliation: Virginia Tech
+    orcid: 'https://orcid.org/0000-0002-2344-1816'
+repository-code: 'https://github.com/lhami/flavor-fetcher'
+preferred-citation:
+  type: article
+  title: >-
+    Sensory Descriptor Analysis of Whisky Lexicons
+    through the Use of Deep Learning
+  authors:
+  - given-names: Chreston
+    family-names: Miller
+    email: chmille3@vt.edu
+    affiliation: Virginia Tech
+    orcid: 'https://orcid.org/0000-0003-4276-0537'
+  - given-names: Leah
+    family-names: Hamilton
+    email: lmhamilton@ucdavis.edu
+    affiliation: UC Davis
+    orcid: 'https://orcid.org/0000-0002-3018-2541'
+  - given-names: Jacob
+    family-names: Lahne
+    email: jlahne@vt.edu
+    affiliation: Virginia Tech
+    orcid: 'https://orcid.org/0000-0002-2344-1816'
+  identifiers:
+  - type: doi
+    value: 10.3390/foods10071633
+  journal: Foods
+  url: https://www.mdpi.com/2304-8158/10/7/1633
+  volume: 10
+  issue: 7
+  start: 1633
+  year: 2021
